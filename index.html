@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tiempo de pantalla — límites y bloqueo de apps en el móvil</title>
+<meta name="description" content="Pon un límite diario a Instagram, TikTok, YouTube o cualquier app, apunta tu tiempo de uso, mira tu historial y bloquea las apps con una pantalla de pausa que se abre sola. Gratis y sin cuentas.">
+<link rel="canonical" href="https://adrianezd.github.io/tiempo-de-pantalla/">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6c4ed9">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tiempo de pantalla: límites y bloqueo de apps">
+<meta property="og:description" content="Límites diarios por app, historial y una pantalla de pausa que bloquea las apps cuando te pasas.">
+<meta property="og:url" content="https://adrianezd.github.io/tiempo-de-pantalla/">
+<meta property="og:locale" content="es_ES">
+<link rel="stylesheet" href="style.css?v=1">
+<style>:root { --accent: #6c4ed9; }</style>
+<!-- seo -->
+<meta name="keywords" content="tiempo de pantalla, limitar instagram, bloquear apps, bloquear tiktok, tiempo de uso móvil, adicción al móvil, bienestar digital">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="adrianezd">
+<meta property="og:site_name" content="Tiempo de pantalla: límites y bloqueo de apps">
+<meta property="og:image" content="https://adrianezd.github.io/tiempo-de-pantalla/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tiempo de pantalla: límites y bloqueo de apps">
+<meta name="twitter:description" content="Pon un límite diario a Instagram, TikTok o YouTube, apunta tu tiempo de uso, mira tu historial y bloquea las apps con una pantalla de pausa.">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Tiempo de pantalla: límites y bloqueo de apps","url":"https://adrianezd.github.io/tiempo-de-pantalla/","description":"Pon un límite diario a Instagram, TikTok o YouTube, apunta tu tiempo de uso, mira tu historial y bloquea las apps con una pantalla de pausa.","inLanguage":"es","applicationCategory":"LifestyleApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Person","name":"adrianezd"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Puede una web bloquear apps del móvil?","acceptedAnswer":{"@type":"Answer","text":"Por sí sola no. Con una automatización de Atajos (iPhone) o MacroDroid (Android), el móvil abre esta web al abrir la app y la web no te deja seguir si has pasado tu límite."}},{"@type":"Question","name":"¿Lee mi tiempo de uso automáticamente?","acceptedAnswer":{"@type":"Answer","text":"No, los móviles no lo dejan a ninguna web. Copias los minutos de Tiempo de uso o Bienestar digital y la web lleva el historial; las aperturas sí las cuenta sola."}},{"@type":"Question","name":"¿Dónde se guardan mis datos?","acceptedAnswer":{"@type":"Answer","text":"Solo en tu navegador. Puedes descargar una copia para pasarla a otro móvil."}}]}]}</script>
+<!-- /seo -->
+</head>
+<body>
+<header class="top">
+  <h1>⏳ Tiempo de pantalla</h1>
+  <p class="sub">Límites por app, tu historial y una pausa antes de abrirlas</p>
+</header>
+
+<nav class="pestanas" role="tablist">
+  <button data-p="hoy" role="tab">Hoy</button>
+  <button data-p="apuntar" role="tab">Apuntar</button>
+  <button data-p="historial" role="tab">Historial</button>
+  <button data-p="apps" role="tab">Apps</button>
+  <button data-p="bloqueo" role="tab">Bloqueo</button>
+</nav>
+
+<main>
+  <section class="panel" id="p-hoy" hidden>
+    <div class="cifras">
+      <div class="tarjeta"><div class="etq">Hoy llevas</div><b id="hoyTotal">0 min</b><span>en tus apps</span></div>
+      <div class="tarjeta"><div class="etq">Aperturas</div><b id="hoyAperturas">0</b><span>con la pantalla de pausa</span></div>
+      <div class="tarjeta"><div class="etq">Límites superados</div><b id="hoyPasadas">0</b><span>apps</span></div>
+    </div>
+    <div class="tarjeta">
+      <h2>Por app</h2>
+      <ul class="lista-apps" id="hoyLista"></ul>
+      <p class="texto" style="margin-bottom:0">Los minutos marcados como <em>estimado</em> son los que te concedes en la pantalla de pausa. Para el dato exacto, apúntalo en la pestaña Apuntar.</p>
+    </div>
+  </section>
+
+  <section class="panel" id="p-apuntar" hidden>
+    <div class="tarjeta">
+      <h2>Apunta tu tiempo de uso</h2>
+      <p class="texto">Copia los minutos de cada app de <b>Ajustes › Tiempo de uso</b> en iPhone o de <b>Ajustes › Bienestar digital</b> en Android. Un minuto al día basta para tener tu historial completo.</p>
+      <label class="fecha">Día <input type="date" id="apFecha"></label>
+      <div id="apLista" class="ap-lista"></div>
+      <button class="boton" id="apGuardar">Guardar</button>
+    </div>
+  </section>
+
+  <section class="panel" id="p-historial" hidden>
+    <div class="tarjeta form">
+      <label>Periodo <select id="hRango"><option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option><option value="90">Últimos 90 días</option></select></label>
+      <label>App <select id="hApp"></select></label>
+    </div>
+    <div class="cifras">
+      <div class="tarjeta"><div class="etq">Media diaria</div><b id="hMedia">–</b><span>días con uso</span></div>
+      <div class="tarjeta"><div class="etq">Total</div><b id="hTotal">–</b><span>en el periodo</span></div>
+      <div class="tarjeta"><div class="etq">Sobre el límite</div><b id="hSobre">–</b><span>en el periodo</span></div>
+      <div class="tarjeta"><div class="etq">Frente al anterior</div><b id="hCambio">–</b><span>mismo número de días</span></div>
+    </div>
+    <div class="tarjeta">
+      <h2>Minutos al día</h2>
+      <div class="grafico" id="hGrafico" role="img" aria-label="Minutos de uso por día"></div>
+    </div>
+    <div class="tarjeta tabla-scroll">
+      <h2>Por app</h2>
+      <table><thead><tr><th>App</th><th class="n">Media</th><th class="n">Total</th><th class="n">Abiertas</th><th class="n">Sobre límite</th></tr></thead><tbody id="hTabla"></tbody></table>
+    </div>
+  </section>
+
+  <section class="panel" id="p-apps" hidden>
+    <div id="appsLista" class="apps-lista"></div>
+    <div class="tarjeta form">
+      <label>Añadir app <select id="addPreset"></select></label>
+    </div>
+    <div class="tarjeta">
+      <h2>Copia de seguridad</h2>
+      <p class="texto">Todo se guarda solo en este navegador. Descarga una copia para pasarla a otro móvil.</p>
+      <div class="botones"><button class="boton" id="exportar">Descargar copia</button><label class="boton fantasma">Cargar copia<input type="file" id="importar" accept=".json,application/json" hidden></label></div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-bloqueo" hidden>
+    <div class="tarjeta">
+      <h2>Cómo funciona el bloqueo</h2>
+      <p class="texto">Una web no puede cerrar otras apps por sí sola. El truco es una automatización del móvil que abre esta web cada vez que abres la app: verás una pausa de unos segundos y decidirás si entras. Si ya has pasado tu límite o la tienes en bloqueo total, la web no te deja seguir. Además cuenta cuántas veces abres cada app.</p>
+      <ul class="enlaces" id="blLista"></ul>
+    </div>
+    <details class="tarjeta guia" open>
+      <summary><h2>En iPhone con Atajos</h2></summary>
+      <p class="texto">Abre la app <b>Atajos</b> › pestaña <b>Automatización</b> › <b>Nueva automatización</b> › <b>App</b>. Elige <b class="ej-app">Instagram</b>, marca <b>Se abre</b> y <b>Ejecutar inmediatamente</b>. Después añade estas acciones en orden:</p>
+      <ol>
+        <li><b>Obtener archivo</b> de la carpeta Atajos con la ruta <code>pausa-<span class="ej-app">Instagram</span>.txt</code>. Desactiva <i>Mostrar error si no se encuentra</i>.</li>
+        <li><b>Obtener fechas</b> del archivo.</li>
+        <li><b>Obtener tiempo entre fechas</b>: entre las fechas y la fecha actual, en minutos.</li>
+        <li><b>Si</b> el tiempo entre fechas <b>es menor que</b> <span class="ej-min">10</span>: añade dentro <b>Detener este atajo</b>. Cierra el bloque Si.</li>
+        <li><b>Fecha actual</b> y después <b>Guardar archivo</b> en la carpeta Atajos con la misma ruta, con <i>Sobrescribir</i> activado.</li>
+        <li><b>Abrir URL</b> con tu enlace: <code class="ej-url"></code></li>
+      </ol>
+      <p class="texto">Los pasos 1 a 5 evitan que la pausa salte otra vez al volver a la app durante los minutos que te concedes. Pon en el paso 4 los mismos minutos que en la pestaña Apps. Si quieres un bloqueo sin salida, deja solo el paso 6: la app se cerrará cada vez que la abras.</p>
+    </details>
+    <details class="tarjeta guia">
+      <summary><h2>En Android con MacroDroid</h2></summary>
+      <ol>
+        <li>Instala <b>MacroDroid</b> desde Google Play y crea una macro nueva.</li>
+        <li>Disparador: <b>Aplicaciones › Aplicación iniciada o cerrada</b>, elige <b class="ej-app">Instagram</b> y <b>Iniciada</b>.</li>
+        <li>Acción: <b>Abrir sitio web</b> con tu enlace: <code class="ej-url"></code></li>
+        <li>Para que no salte otra vez al volver a la app, añade una restricción de tiempo desde el último disparo de <span class="ej-min">10</span> minutos.</li>
+      </ol>
+      <p class="texto">Para un límite estricto, Android trae <b>Bienestar digital › Temporizadores de apps</b>: al llegar al límite la app se pausa hasta el día siguiente.</p>
+    </details>
+    <details class="tarjeta guia">
+      <summary><h2>Bloqueo del propio sistema</h2></summary>
+      <p class="texto">En iPhone, <b>Ajustes › Tiempo de uso › Límites de uso de apps</b> bloquea la app al llegar al tiempo que pongas. Si le pides a otra persona que ponga el código de Tiempo de uso, no podrás saltártelo. En Android, <b>Bienestar digital</b> hace lo mismo con los temporizadores. Usa los límites que tienes aquí para configurarlos.</p>
+    </details>
+  </section>
+</main>
+
+<div class="pausa" id="pausa" hidden><div class="pz-caja" id="pzCaja"></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<footer>Hecho por adrianezd. Tus datos no salen de este navegador.</footer>
+<!-- red -->
+<section class="seo-faq" style="max-width:760px;margin:0 auto;padding:8px 16px;font-size:.92rem;opacity:.85"><h2 style="font-size:1rem">Preguntas frecuentes</h2><details><summary>¿Puede una web bloquear apps del móvil?</summary><p>Por sí sola no. Con una automatización de Atajos (iPhone) o MacroDroid (Android), el móvil abre esta web al abrir la app y la web no te deja seguir si has pasado tu límite.</p></details><details><summary>¿Lee mi tiempo de uso automáticamente?</summary><p>No, los móviles no lo dejan a ninguna web. Copias los minutos de Tiempo de uso o Bienestar digital y la web lleva el historial; las aperturas sí las cuenta sola.</p></details><details><summary>¿Dónde se guardan mis datos?</summary><p>Solo en tu navegador. Puedes descargar una copia para pasarla a otro móvil.</p></details></section>
+<nav class="seo-red" style="max-width:760px;margin:0 auto;padding:8px 16px 28px;font-size:.85rem;opacity:.75;text-align:center">Más webs gratis: <a href="https://adrianezd.github.io/precio-luz-hoy/">Precio de la luz</a> · <a href="https://adrianezd.github.io/sueldo-neto/">Sueldo neto</a> · <a href="https://adrianezd.github.io/la-previa/">La Previa</a> · <a href="https://adrianezd.github.io/brisca-maldita/">Brisca Maldita</a> · <a href="https://adrianezd.github.io/embalses-hoy/">Embalses hoy</a> · <a href="https://adrianezd.github.io/calendario-laboral/">Calendario laboral</a> · <a href="https://adrianezd.github.io/alquilar-o-comprar/">Alquilar o comprar</a> · <a href="https://adrianezd.github.io/coste-viaje/">Coste del viaje</a> · <a href="https://adrianezd.github.io/pueblodle/">Pueblodle</a> · <a href="https://adrianezd.github.io/grid-laliga/">Grid LaLiga</a> · <a href="https://adrianezd.github.io/quien-lo-dijo/">Quién lo dijo</a> · <a href="https://adrianezd.github.io/el-mentiroso/">El Mentiroso</a> · <a href="https://adrianezd.github.io/tute/">Tute</a> · <a href="https://adrianezd.github.io/bar-de-pueblo/">Bar de Pueblo</a> · <a href="https://adrianezd.github.io/tiempo-de-pantalla/">Tiempo de pantalla</a> · <a href="https://adrianezd.github.io/mi-musica/">Tu música en datos</a></nav>
+<!-- /red -->
+<script src="script.js?v=1"></script>
+</body>
+</html>

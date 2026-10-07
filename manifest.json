@@ -1,0 +1,12 @@
+{
+  "name": "Tiempo de pantalla",
+  "short_name": "Pantalla",
+  "description": "Límites diarios por app, historial de uso y pantalla de pausa para bloquear apps en el móvil.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#6c4ed9",
+  "theme_color": "#6c4ed9",
+  "lang": "es",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
